@@ -1,0 +1,12 @@
+*.exe
+*.obj
+*.iobj
+*.pdb
+*.ipdb
+*.log
+*.tlog
+*.lastbuildstate
+
+.vs
+x64
+x86
