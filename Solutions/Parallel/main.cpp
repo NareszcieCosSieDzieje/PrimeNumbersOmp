@@ -2,42 +2,46 @@
 #include <vector>
 #include <iostream>
 
-std::vector<unsigned int> sieveOfEratosthenes(unsigned int start, unsigned int end);
+#include "../../GlobalHeaders/global_names.h"
+#include "../../GlobalHeaders/prime_functions.h"
+#include "../../GlobalHeaders/overloaded_operators.h"
+#include "../../GlobalHeaders/string_processing.h"
+#include "../../GlobalHeaders/benchmark.h"
+
+
+#define NOW std::chrono::high_resolution_clock::now()
+
+int g_INTERVAL_START = 1;
+int g_INTERVAL_END = 100000;
+
 
 int main(int argc, char** argv) {
 
+    if ((argc < 2) && (false)) {
+		std::cerr << "Za ma³o argumentów. Podaj przedzia³ liczbowy. Format: N,M\n" << std::endl;
+		exit(ARGUMENTS_EXIT);
+	}
 
+    //std::string interval = std::string(argv[1]);
+	//processInterval(interval, g_INTERVAL_START, g_INTERVAL_END);
 
-    printf("elo\n");
-    printf("elo2\n");
+	g_INTERVAL_START = 2;
+	g_INTERVAL_END = 10000000;
+    
+	int numThreads = 6;
+
+	std::cout << "Sekwencyjne dzielenie     : " << timeFuncInvocation(1, findPrimes, g_INTERVAL_START, g_INTERVAL_END) << "[ms] / 60000 ms" << std::endl;
+
+	std::cout << "Rownolegle dzielenie      : " << timeFuncInvocation(1, parallelFindPrimes, g_INTERVAL_START, g_INTERVAL_END, numThreads) << "[ms] / 60000 ms" << std::endl;
+
+	//std::cout << "Sekwencyjne Sito          : " << timeFuncInvocation(1, sieveOfEratosthenes, g_INTERVAL_START, g_INTERVAL_END) << "[ms] / 60000 ms" << std::endl;
+
+   // std::cout << "Równoleg³e fullSieve      : " << timeFuncInvocation(1, fullSieveParallelSieveOfEratosthenes, g_INTERVAL_START, g_INTERVAL_END, numThreads) << "[ms] / 60000 ms" << std::endl;
+
+	//std::cout << "Równoleg³e fullPrimes     : " << timeFuncInvocation(1, fullPrimesParallelSieveOfEratosthenes, g_INTERVAL_START, g_INTERVAL_END, numThreads) << "[ms] / 60000 ms" << std::endl;
+
+	
+	
 	return 0;
 }
 
-
-std::vector<unsigned int> sieveOfEratosthenes(unsigned int start, unsigned int end) {
-    std::vector<unsigned int> primeNumbers;
-    std::vector<bool> sieve(end - start + 1); //already initialized to false
-
-    unsigned int sqrtN = std::sqrt(sieve.size());
-    unsigned int sieveSize = sieve.size();
-
-    for (unsigned int i = 0; i < sqrtN; i++) { // 
-        if (!sieve.at(i)) {
-            unsigned int step = (start + i);
-            //std::cout << "\ni = " << i << "\n_____________________" << std::endl;
-            for (unsigned int y = step + i; y < sieveSize; y += step) {
-                //std::cout << "y = " << y << " | val = " << start+ y <<std::endl;
-                sieve.at(y) = true;
-            }
-        }
-    }
-
-    for (unsigned int prime = 0; prime < sieveSize; prime++) {
-        if (!sieve.at(prime)) {
-            primeNumbers.push_back(prime + start);
-        }
-    }
-
-    std::cout << primeNumbers.size() << std::endl;
-    return primeNumbers;
-}

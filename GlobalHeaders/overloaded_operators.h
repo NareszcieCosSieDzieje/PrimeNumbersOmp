@@ -6,7 +6,8 @@
 #include <string>
 
 // Wyswietlanie wektora
-std::ostream& operator<<(std::ostream& os, const std::vector<int>& input) {
+template<typename T>
+std::ostream& operator<<(std::ostream& os, const std::vector<T>& input) {
 	for (auto const& x : input) {
 		os << x << " ";
 	}
