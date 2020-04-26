@@ -25,24 +25,44 @@ int main(int argc, char** argv) {
     //std::string interval = std::string(argv[1]);
 	//processInterval(interval, g_INTERVAL_START, g_INTERVAL_END);
 
+	/*
+	* SD (2, 10000000) 12s
+	* SD (10000000/2, 10000000) 7s
+	*
+	*
+	*/
+
 	g_INTERVAL_START = 2;
-	g_INTERVAL_END = 100000000;
+
+	g_INTERVAL_END = 2000000000;
     
 	int numThreads = 4;
 
-	std::cout << "Sekwencyjne dzielenie     : " << timeFuncInvocation(3, findPrimes, g_INTERVAL_START, g_INTERVAL_END) << "[ms] / 60000 ms" << std::endl;
+	//std::cout << "Sekwencyjne dzielenie     : " << timeFuncInvocation(1, findPrimes, g_INTERVAL_START, g_INTERVAL_END) << "[ms] / 60000 ms" << std::endl;
 
-	std::cout << "Rownolegle dzielenie      : " << timeFuncInvocation(3, parallelFindPrimes, g_INTERVAL_START, g_INTERVAL_END, numThreads) << "[ms] / 60000 ms" << std::endl;
+	//std::cout << "Rownolegle dzielenie      : " << timeFuncInvocation(1, parallelFindPrimes, g_INTERVAL_START, g_INTERVAL_END, numThreads) << "[ms] / 60000 ms" << std::endl;
+	
+	std::cout << "elo dzialam" << std::endl;
+
+
+	//std::cout << "Sekwencyjne Sito          : " << timeFuncInvocation(1, sieveOfEratosthenes, g_INTERVAL_START, g_INTERVAL_END) << "[ms] / 60000 ms" << std::endl;
+
+	
+	std::cout << "Rownolegle fullSieve      : " << timeFuncInvocation(1, fullSieveParallelSieveOfEratosthenes, g_INTERVAL_START, g_INTERVAL_END, numThreads) << "[ms] / 60000 ms" << std::endl;
+	
+
+	
+
+	//std::cout << "Sito najlepsze ultra      : " << timeFuncInvocation(1, eratosthenesBlockwise, g_INTERVAL_START, g_INTERVAL_END, 128*1024, numThreads) << "[ms] / 60000 ms" << std::endl;
+	
+
+
+
+
 
 	//std::cout << "Sito super dobre          : " << timeFuncInvocation(3, eratosthenesOdd, g_INTERVAL_START, g_INTERVAL_END, numThreads) << "[ms] / 60000 ms" << std::endl;
 
-	std::cout << "Sekwencyjne Sito          : " << timeFuncInvocation(3, sieveOfEratosthenes, g_INTERVAL_START, g_INTERVAL_END) << "[ms] / 60000 ms" << std::endl;
-
-	std::cout << "Rownolegle fullSieve      : " << timeFuncInvocation(3, fullSieveParallelSieveOfEratosthenes, g_INTERVAL_START, g_INTERVAL_END, numThreads) << "[ms] / 60000 ms" << std::endl;
-
 	//std::cout << "Rownolegle pawel          : " << timeFuncInvocation(3, fullSieveParallelSieveOfEratosthenes2, g_INTERVAL_START, g_INTERVAL_END, 100, numThreads) << "[ms] / 60000 ms" << std::endl;
-
-	std::cout << "Sito najlepsze ultra      : " << timeFuncInvocation(3, eratosthenesBlockwise, g_INTERVAL_START, g_INTERVAL_END, 128*1024, numThreads) << "[ms] / 60000 ms" << std::endl;
 
 	//std::cout << "Równoleg³e fullPrimes     : " << timeFuncInvocation(1, fullPrimesParallelSieveOfEratosthenes, g_INTERVAL_START, g_INTERVAL_END, numThreads) << "[ms] / 60000 ms" << std::endl;
 

@@ -64,6 +64,41 @@ std::vector<int> sieveOfEratosthenes(int start, int end) {
 }
 
 
+
+std::vector<int> sieveOfEratosthenes2(int start, int end) {
+    std::vector<int> primeNumbers;
+    std::vector<bool> sieve(end - start + 1); //already initialized to false
+
+    int sqrtN = std::sqrt(sieve.size());
+    int sieveSize = sieve.size();
+
+    for (int pi = 2; pi < sqrtN; pi++) {
+            int startIndex = 0;
+            while ((startIndex + start) % pi != 0) {
+                startIndex++;
+            }
+            if (isPrime(startIndex + start)) {
+                sieve[startIndex] = true;
+            }
+            int remIndex = startIndex + pi;
+            while (remIndex < sieveSize) {
+                sieve[remIndex] = true;
+                remIndex += pi;
+            }
+        }
+    
+    for (int prime = 0; prime < sieveSize; prime++) {
+        if(!sieve.at(prime)){
+            primeNumbers.push_back(prime + start);
+        }
+    }
+    
+    std::cout << primeNumbers << std::endl;
+    std::cout << primeNumbers.size() << std::endl;
+    return primeNumbers;
+}
+
+
 // Parellel sieve 3/5
 std::vector<unsigned int> fullPrimesParallelSieveOfEratosthenes(unsigned int start, unsigned int end, int numThreads) {
     int sieveSize = end - start + 1;
@@ -150,12 +185,11 @@ std::vector<int> fullSieveParallelSieveOfEratosthenes(int start, int end, int nu
     
     std::vector<int> firstPrimes = sieveOfEratosthenes(2, std::sqrt(end));
     int firstPrimesSize = firstPrimes.size();
-    std::vector<int> used(firstPrimesSize);
     std::vector<int> primeNumbers;
    
     omp_set_num_threads(numThreads);
 
-    int* sieveArray = new int[sieveSize];
+    char* sieveArray = new char[sieveSize];
 #pragma omp parallel for 
     for (int e = 0; e < sieveSize; e++) {
         sieveArray[e] = 0;
@@ -389,6 +423,76 @@ int eratosthenesBlockwise(int firstNumber, int lastNumber, int sliceSize, char n
 }
 
 
+// process only odd numbers of a specified block
+int eratosthenesOddSingleBlock2(const long long from, const long long to)
+{
+    const int memorySize = (to - from + 1) / 2;
+    // initialize
+    char* isPrime = new char[memorySize];
+    for (int i = 0; i < memorySize; i++)
+        isPrime[i] = 1;
+    for (long long i = 3; i * i <= to; i += 2)
+    {
+        // >>> UPDATE October 6, 2011
+        // skip multiples of three: 9, 15, 21, 27, ...
+        if (i >= 3 * 3 && i % 3 == 0)
+            continue;
+        // skip multiples of five
+        if (i >= 5 * 5 && i % 5 == 0)
+            continue;
+        // skip multiples of seven
+        if (i >= 7 * 7 && i % 7 == 0)
+            continue;
+        // skip multiples of eleven
+        if (i >= 11 * 11 && i % 11 == 0)
+            continue;
+        // skip multiples of thirteen
+        if (i >= 13 * 13 && i % 13 == 0)
+            continue;
+        // skip numbers before current slice
+        long long minJ = ((from + i - 1) / i) * i;
+        if (minJ < i * i)
+            minJ = i * i;
+        // start value must be odd
+        if ((minJ & 1) == 0)
+            minJ += i;
+        // find all odd non-primes
+        for (long long j = minJ; j <= to; j += 2 * i)
+        {
+            long long index = j - from;
+            isPrime[index / 2] = 0;
+        }
+    }
+    // count primes in this block
+    int found = 0;
+    for (int i = 0; i < memorySize; i++)
+        found += isPrime[i];
+    // 2 is not odd => include on demand
+    if (from <= 2)
+        found++;
+    delete[] isPrime;
+    return found;
+}
+
+
+// process slice-by-slice, odd numbers only
+long long eratosthenesBlockwise2(long long firstNumber, long long lastNumber, int sliceSize, char numThreads = 1)
+{
+    // enable/disable OpenMP
+    omp_set_num_threads(numThreads);
+    long long found = 0;
+    // each slices covers ["from" ... "to"], incl. "from" and "to"
+#pragma omp parallel for reduction(+:found)
+    for (long long from = firstNumber; from <= lastNumber; from += sliceSize)
+    {
+        long long to = from + sliceSize;
+        if (to > lastNumber)
+            to = lastNumber;
+        found += eratosthenesOddSingleBlock2(from, to);
+    }
+    std::cout << "Znaleziono US: " << found << std::endl;
+    return found;
+}
 
 
 #endif //_PRIME_FUNCTIONS_H_
