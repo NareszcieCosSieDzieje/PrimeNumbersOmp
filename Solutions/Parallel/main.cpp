@@ -45,10 +45,10 @@ int main(int argc, char** argv) {
 	std::cout << "elo dzialam" << std::endl;
 
 
-	//std::cout << "Sekwencyjne Sito          : " << timeFuncInvocation(1, sieveOfEratosthenes, g_INTERVAL_START, g_INTERVAL_END) << "[ms] / 60000 ms" << std::endl;
+	std::cout << "Sekwencyjne Sito          : " << timeFuncInvocation(1, sieveOfEratosthenes, g_INTERVAL_START, g_INTERVAL_END) << "[ms] / 60000 ms" << std::endl;
 
 	
-	std::cout << "Rownolegle fullSieve      : " << timeFuncInvocation(1, fullSieveParallelSieveOfEratosthenes, g_INTERVAL_START, g_INTERVAL_END, numThreads) << "[ms] / 60000 ms" << std::endl;
+	//std::cout << "Rownolegle fullSieve      : " << timeFuncInvocation(1, fullSieveParallelSieveOfEratosthenes, g_INTERVAL_START, g_INTERVAL_END, numThreads) << "[ms] / 60000 ms" << std::endl;
 	
 
 	
