@@ -29,7 +29,7 @@ std::vector<unsigned int> findPrimes(unsigned int start, unsigned int end) {
             primeNumbers.push_back(i);
         }
     }
-    std::cout << "Znaleziono FP: " << primeNumbers.size() << std::endl;
+    std::cout << "Znaleziono SD: " << primeNumbers.size() << std::endl;
     return primeNumbers;
 }
 
@@ -59,7 +59,7 @@ std::vector<int> sieveOfEratosthenes(int start, int end) {
         }
     }
     
-    //std::cout << primeNumbers.size() << std::endl;
+    std::cout << "Znaleziono SSE: " << primeNumbers.size() << std::endl;
     return primeNumbers;
 }
 
@@ -221,7 +221,7 @@ std::vector<int> fullSieveParallelSieveOfEratosthenes(int start, int end, int nu
     }
     
     delete[] sieveArray;
-    std::cout << "Znaleziono FS: " << found << std::endl;
+    std::cout << "Znaleziono RSE_F: " << -found << std::endl;
     
     return primeNumbers;
 }
@@ -311,14 +311,14 @@ std::vector<int> parallelFindPrimes(int start, int end, int numThreads) {
 #pragma omp critical
         primeNumbers.insert(primeNumbers.end(), localPrimeNumbers.begin(), localPrimeNumbers.end());
     }
-    std::cout << "Znaleziono PP: " << primeNumbers.size() << std::endl;
+    std::cout << "Znaleziono RD: " << primeNumbers.size() << std::endl;
 
     return primeNumbers;
 }
 
 
 // odd-only sieve
-int eratosthenesOdd(int firstNumber, int lastNumber, char numThreads = 1)
+/*int eratosthenesOdd(int firstNumber, int lastNumber, char numThreads = 1)
 {
     // enable/disable OpenMP
     omp_set_num_threads(numThreads);
@@ -347,7 +347,7 @@ int eratosthenesOdd(int firstNumber, int lastNumber, char numThreads = 1)
 
     std::cout << "Znaleziono: " << found << std::endl;
     return found;
-}
+}*/
 
 
 // Parallel sieve domain 4/5 - RSE_D
@@ -418,7 +418,7 @@ int eratosthenesBlockwise(int firstNumber, int lastNumber, int sliceSize, char n
             to = lastNumber;
         found += eratosthenesOddSingleBlock(from, to);
     }
-    std::cout << "Znaleziono US: " << found << std::endl;
+    std::cout << "Znaleziono RSE_D: " << found << std::endl;
     return found;
 }
 
