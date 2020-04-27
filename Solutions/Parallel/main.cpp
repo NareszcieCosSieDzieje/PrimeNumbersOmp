@@ -11,62 +11,57 @@
 
 #define NOW std::chrono::high_resolution_clock::now()
 
-int g_INTERVAL_START = 1;
-int g_INTERVAL_END = 100000;
+int g_INTERVAL_START = 2;
+int g_INTERVAL_END = 2000000000;
+int numThreads = 4;
+std::string chosenAlgorithm="";
 
 
 int main(int argc, char** argv) {
 
-    if ((argc < 2) && (false)) {
-		std::cerr << "Za ma³o argumentów. Podaj przedzia³ liczbowy. Format: N,M\n" << std::endl;
+    
+	if (argc < 4) {
+		std::cerr << "Sproboj: " << argv[0] << " N,M alg threadNum" << std::endl;
+		std::cerr << "N,M - przedzial od N do M" << std::endl;
+		std::cerr << "alg - SSE RSEF RSED SD RD" << std::endl;
+		std::cerr << "threadNum - liczba watkow" << std::endl;
 		exit(ARGUMENTS_EXIT);
 	}
 
-    //std::string interval = std::string(argv[1]);
-	//processInterval(interval, g_INTERVAL_START, g_INTERVAL_END);
+	chosenAlgorithm = argv[2];
 
-	/*
-	* SD (2, 10000000) 12s
-	* SD (10000000/2, 10000000) 7s
-	*
-	*
-	*/
+	try {
+		numThreads = atoi(argv[3]);
+	}
+	catch (...) {
+		std::cerr << "Podano zla ilosc watkow" << std::endl;
+		exit(1);
+	}
 
-	g_INTERVAL_START = 2;
-
-	g_INTERVAL_END = 2000000000;
-    
-	int numThreads = 4;
-
-	//std::cout << "Sekwencyjne dzielenie     : " << timeFuncInvocation(1, findPrimes, g_INTERVAL_START, g_INTERVAL_END) << "[ms] / 60000 ms" << std::endl;
-
-	//std::cout << "Rownolegle dzielenie      : " << timeFuncInvocation(1, parallelFindPrimes, g_INTERVAL_START, g_INTERVAL_END, numThreads) << "[ms] / 60000 ms" << std::endl;
+	std::string interval = std::string(argv[1]);
+	processInterval(interval, g_INTERVAL_START, g_INTERVAL_END); 
 	
-	std::cout << "elo dzialam" << std::endl;
+	if (chosenAlgorithm == "SD") {
+		std::cout << "SD    : " << timeFuncInvocation(1, findPrimes, g_INTERVAL_START, g_INTERVAL_END) << "[ms] / 60000 ms" << std::endl;
+	}
+	else if (chosenAlgorithm == "RD") {
+		std::cout << "RD    : " << timeFuncInvocation(1, parallelFindPrimes, g_INTERVAL_START, g_INTERVAL_END, numThreads) << "[ms] / 60000 ms" << std::endl;
+	}
+	else if (chosenAlgorithm == "SSE") {
+		std::cout << "SSE   : " << timeFuncInvocation(1, sieveOfEratosthenes, g_INTERVAL_START, g_INTERVAL_END) << "[ms] / 60000 ms" << std::endl;
+	}
+	else if (chosenAlgorithm == "RSE_F") {
+		std::cout << "RSE_F : " << timeFuncInvocation(1, fullSieveParallelSieveOfEratosthenes, g_INTERVAL_START, g_INTERVAL_END, numThreads) << "[ms] / 60000 ms" << std::endl;
+	}
+	else if (chosenAlgorithm == "RSE_D") {
+		std::cout << "RSE_D : " << timeFuncInvocation(1, eratosthenesBlockwise, g_INTERVAL_START, g_INTERVAL_END, 128 * 1024, numThreads) << "[ms] / 60000 ms" << std::endl;
+	} else {
+		std::cerr << "Nie wybrano poprawnie algorytmu" << std::endl;
+		std::cerr << "alg - SSE RSEF RSED SD RD" << std::endl;
+		exit(1);
+	}
 
 
-	std::cout << "Sekwencyjne Sito          : " << timeFuncInvocation(1, sieveOfEratosthenes, g_INTERVAL_START, g_INTERVAL_END) << "[ms] / 60000 ms" << std::endl;
-
-	
-	//std::cout << "Rownolegle fullSieve      : " << timeFuncInvocation(1, fullSieveParallelSieveOfEratosthenes, g_INTERVAL_START, g_INTERVAL_END, numThreads) << "[ms] / 60000 ms" << std::endl;
-	
-
-	
-
-	//std::cout << "Sito najlepsze ultra      : " << timeFuncInvocation(1, eratosthenesBlockwise, g_INTERVAL_START, g_INTERVAL_END, 128*1024, numThreads) << "[ms] / 60000 ms" << std::endl;
-	
-
-
-
-
-
-	//std::cout << "Sito super dobre          : " << timeFuncInvocation(3, eratosthenesOdd, g_INTERVAL_START, g_INTERVAL_END, numThreads) << "[ms] / 60000 ms" << std::endl;
-
-	//std::cout << "Rownolegle pawel          : " << timeFuncInvocation(3, fullSieveParallelSieveOfEratosthenes2, g_INTERVAL_START, g_INTERVAL_END, 100, numThreads) << "[ms] / 60000 ms" << std::endl;
-
-	//std::cout << "Równoleg³e fullPrimes     : " << timeFuncInvocation(1, fullPrimesParallelSieveOfEratosthenes, g_INTERVAL_START, g_INTERVAL_END, numThreads) << "[ms] / 60000 ms" << std::endl;
-
-	
 	return 0;
 }
 

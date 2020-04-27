@@ -13,8 +13,8 @@
 
 //=================================================================MAIN============================================================================\\
 
-unsigned int g_INTERVAL_START = 0;
-unsigned int g_INTERVAL_END = 0;
+int g_INTERVAL_START = 0;
+int g_INTERVAL_END = 0;
 
 int main(int argc, char** argv) {
 	if (argc < 2) {

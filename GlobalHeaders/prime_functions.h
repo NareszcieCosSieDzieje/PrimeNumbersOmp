@@ -21,7 +21,7 @@ bool isPrime(unsigned int n) {
 
 
 
-// Sequential division 1/5
+// Sequential division 1/5 - SD
 std::vector<unsigned int> findPrimes(unsigned int start, unsigned int end) {
     std::vector<unsigned int> primeNumbers;
     for (unsigned int i = start; i <= end; i++) {
@@ -34,23 +34,23 @@ std::vector<unsigned int> findPrimes(unsigned int start, unsigned int end) {
 }
 
 
-// Sequential sieve 2/5
+// Sequential sieve 2/5 - SSE
 std::vector<int> sieveOfEratosthenes(int start, int end) {
     std::vector<int> primeNumbers;
-    std::vector<bool> sieve(end - start + 1); //already initialized to false
+    std::vector<bool> sieve(end - start + 1); 
 
     int sqrtN = std::sqrt(sieve.size());
     int sieveSize = sieve.size();
 
     for (int i = 0; i < sqrtN; i++) { // 
-        if (!sieve.at(i)) {  
+        if (!sieve.at(i)) {
             int step = (start + i);
             //std::cout << "\ni = " << i << "\n_____________________" << std::endl;
             for (int y = step+i; y < sieveSize; y += step) {
                 //std::cout << "y = " << y << " | val = " << start+ y <<std::endl;
                 sieve.at(y) = true;
             }
-        }    
+        }
     }
     
     for (int prime = 0; prime < sieveSize; prime++) {
@@ -65,7 +65,7 @@ std::vector<int> sieveOfEratosthenes(int start, int end) {
 
 
 
-std::vector<int> sieveOfEratosthenes2(int start, int end) {
+/*std::vector<int> sieveOfEratosthenes2(int start, int end) {
     std::vector<int> primeNumbers;
     std::vector<bool> sieve(end - start + 1); //already initialized to false
 
@@ -96,11 +96,11 @@ std::vector<int> sieveOfEratosthenes2(int start, int end) {
     std::cout << primeNumbers << std::endl;
     std::cout << primeNumbers.size() << std::endl;
     return primeNumbers;
-}
+}*/
 
 
-// Parellel sieve 3/5
-std::vector<unsigned int> fullPrimesParallelSieveOfEratosthenes(unsigned int start, unsigned int end, int numThreads) {
+//Parellel sieve 3/5 
+/*std::vector<unsigned int> fullPrimesParallelSieveOfEratosthenes(unsigned int start, unsigned int end, int numThreads) {
     int sieveSize = end - start + 1;
     int sqrtN = std::sqrt(sieveSize);
 
@@ -175,10 +175,10 @@ std::vector<unsigned int> fullPrimesParallelSieveOfEratosthenes(unsigned int sta
     //std::cout << "LICZBY PIERWSZE ALGO 3 YO\n" << primeNumbers << std::endl;
 
     return primeNumbers;
-}
+}*/
 
 
-// Parallel sieve functional 4/5
+// Parallel sieve functional 4/5 - RSE_F
 std::vector<int> fullSieveParallelSieveOfEratosthenes(int start, int end, int numThreads) {
     int sieveSize = end - start + 1;
     int sqrtN = std::sqrt(sieveSize);
@@ -227,7 +227,7 @@ std::vector<int> fullSieveParallelSieveOfEratosthenes(int start, int end, int nu
 }
 
 
-std::vector<int> fullSieveParallelSieveOfEratosthenes2(int start, int end, const int step, int numThreads) {
+/*std::vector<int> fullSieveParallelSieveOfEratosthenes2(int start, int end, const int step, int numThreads) {
     int sieveSize = end - start + 1;
     int sqrtN = std::sqrt(sieveSize);    
     
@@ -291,7 +291,7 @@ std::vector<int> fullSieveParallelSieveOfEratosthenes2(int start, int end, const
     delete[] sieveArray;
     std::cout << "Znaleziono FS 2: " << found << std::endl;
     return primeNumbers;
-}
+}*/
 
 
 
@@ -350,7 +350,7 @@ int eratosthenesOdd(int firstNumber, int lastNumber, char numThreads = 1)
 }
 
 
-// process only odd numbers of a specified block
+// Parallel sieve domain 4/5 - RSE_D
 int eratosthenesOddSingleBlock(const int from, const int to)
 {
     const int memorySize = (to - from + 1) / 2;
@@ -361,20 +361,20 @@ int eratosthenesOddSingleBlock(const int from, const int to)
     for (int i = 3; i * i <= to; i += 2)
     {
         // >>> UPDATE October 6, 2011
-        // skip multiples of three: 9, 15, 21, 27, ...
+        // skip multiples of three: 9, 15, 21, 27, ...   
         if (i >= 3 * 3 && i % 3 == 0)
             continue;
         // skip multiples of five
-        if (i >= 5 * 5 && i % 5 == 0)
+        else if (i >= 5 * 5 && i % 5 == 0)
             continue;
         // skip multiples of seven
-        if (i >= 7 * 7 && i % 7 == 0)
+        else if (i >= 7 * 7 && i % 7 == 0)
             continue;
         // skip multiples of eleven
-        if (i >= 11 * 11 && i % 11 == 0)
+        else if (i >= 11 * 11 && i % 11 == 0)
             continue;
         // skip multiples of thirteen
-        if (i >= 13 * 13 && i % 13 == 0)
+        else if (i >= 13 * 13 && i % 13 == 0)
             continue;
         // <<< UPDATE October 6, 2011
         // skip numbers before current slice
@@ -406,10 +406,10 @@ int eratosthenesOddSingleBlock(const int from, const int to)
 // process slice-by-slice, odd numbers only
 int eratosthenesBlockwise(int firstNumber, int lastNumber, int sliceSize, char numThreads = 1)
 {
-    // enable/disable OpenMP
+    //
     omp_set_num_threads(numThreads);
     int found = 0;
-    // each slices covers ["from" ... "to"], incl. "from" and "to"
+    // 
 #pragma omp parallel for reduction(+:found)
     for (int from = firstNumber; from <= lastNumber; from += sliceSize)
     {
@@ -423,7 +423,7 @@ int eratosthenesBlockwise(int firstNumber, int lastNumber, int sliceSize, char n
 }
 
 
-// process only odd numbers of a specified block
+/* process only odd numbers of a specified block
 int eratosthenesOddSingleBlock2(const long long from, const long long to)
 {
     const int memorySize = (to - from + 1) / 2;
@@ -472,10 +472,10 @@ int eratosthenesOddSingleBlock2(const long long from, const long long to)
         found++;
     delete[] isPrime;
     return found;
-}
+}*/
 
 
-// process slice-by-slice, odd numbers only
+/* process slice-by-slice, odd numbers only
 long long eratosthenesBlockwise2(long long firstNumber, long long lastNumber, int sliceSize, char numThreads = 1)
 {
     // enable/disable OpenMP
@@ -492,7 +492,7 @@ long long eratosthenesBlockwise2(long long firstNumber, long long lastNumber, in
     }
     std::cout << "Znaleziono US: " << found << std::endl;
     return found;
-}
+}*/
 
 
 #endif //_PRIME_FUNCTIONS_H_

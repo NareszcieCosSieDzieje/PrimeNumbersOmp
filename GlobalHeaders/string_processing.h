@@ -14,7 +14,7 @@
 
 
 //nie moze byc negatywnych?
-void processInterval(std::string interval, unsigned int& globalStart, unsigned int& globalEnd) {
+void processInterval(std::string interval, int& globalStart, int& globalEnd) {
 
 	std::regex intervalStart("[-]{0,1}[0-9]+,");
 	std::regex intervalEnd(",[-]{0,1}[0-9]+");
